@@ -1,19 +1,18 @@
 import React from "react";
 import { cx } from "~/utils/helpers";
 
-
 interface ButtonLeftIconProps {
-  icon: React.ReactNode;
-  variant?: 'primary';
+  icon: React.ReactElement<SVGElement>;
+  variant?: "primary";
 }
 
 const ButtonLeftIcon: React.FC<ButtonLeftIconProps> = ({ icon, variant }) => {
   const iconClass = cx(
     "flex items-center",
-    variant === 'primary' && "text-white"
+    variant === "primary" && "fill-white"
   );
 
-  return <span className={iconClass}>{icon}</span>;
+  return React.cloneElement(icon, { className: iconClass });
 };
 
 export default ButtonLeftIcon;
