@@ -1,9 +1,9 @@
 import ButtonLabel from "./ButtonLabel";
-import ButtonLeftIcon from "./ButtonLeftIcon";
+import ButtonIcon from "./ButtonIcon";
 import ButtonRootComponent from "./ButtonRoot";
 
 export const Button = {
   Root: ButtonRootComponent,
-  LeftIcon: ButtonLeftIcon,
+  Icon: ButtonIcon,
   Label: ButtonLabel,
 };

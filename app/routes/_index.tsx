@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { DevicesHeader } from "~/components/DevicesHeader";
-import { Header } from "~/components/Header";
+import TableFilters from "~/components/TableFilters";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,11 +11,9 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <section className="px-6 py-6">
-        <DevicesHeader />
-      </section>
+    <div className="flex flex-col p-6">
+      <DevicesHeader />
+      <TableFilters />
     </div>
   );
 }
