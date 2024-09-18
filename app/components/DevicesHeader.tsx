@@ -1,13 +1,14 @@
 import { PlusIcon } from "~/assets/icons/plus";
+import { Button } from "./Button";
 
 export const DevicesHeader: React.FC = () => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center">
       <h1 className="font-weight-500 text-xl">Devices</h1>
-      <button className="flex items-center rounded-[4px] p-3 gap-2 bg-[#337AB7] text-white">
-        <PlusIcon />
-        <span className="text-sm font-weight-500">Add Device</span>
-      </button>
+      <Button.Root variant="primary">
+        <Button.LeftIcon icon={<PlusIcon />} variant="primary" />
+        <Button.Label variant="primary">Add Device</Button.Label>
+      </Button.Root>
     </div>
   );
 };
