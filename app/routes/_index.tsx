@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { DevicesHeader } from "~/components/DevicesHeader";
-import TableFilters from "~/components/TableFilters";
+import { TableFilters } from "~/components/TableFilters";
 
 export const meta: MetaFunction = () => {
   return [
