@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:3000";
 
-interface Device {
+export interface Device {
   readonly id: number;
   readonly system_name: string;
   readonly value: number;
