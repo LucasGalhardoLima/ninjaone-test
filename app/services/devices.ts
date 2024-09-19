@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:3000";
 
 export interface Device {
-  readonly id: number;
+  readonly id?: number;
   readonly system_name: string;
   readonly value: number;
   readonly type: string;
@@ -25,4 +25,23 @@ export const getDevices = async (): Promise<Device[]> => {
   }
   const devices = (await response.json()) as Device[];
   return devices;
+};
+
+export const createDevice = async (device: Device): Promise<Device> => {
+  const response = await fetch(`${BASE_URL}/devices`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(device),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create device");
+  }
+
+  const createdDevice = (await response.json()) as Device;
+  
+  return createdDevice;
 };
