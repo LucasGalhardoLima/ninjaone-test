@@ -24,6 +24,11 @@ export const DeviceModal: React.FC = () => {
     openModal(false);
   };
 
+  const handleClose = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    onClose();
+  };
+
   const isEdit = !!device;
 
   useEffect(() => {
@@ -141,7 +146,7 @@ export const DeviceModal: React.FC = () => {
                     )}
                   </div>
                   <div className="flex justify-end gap-2 mt-5">
-                    <Button.Root variant="outline" onClick={onClose}>
+                    <Button.Root variant="outline" onClick={handleClose}>
                       <Button.Label>Cancel</Button.Label>
                     </Button.Root>
                     <Button.Root type="submit">

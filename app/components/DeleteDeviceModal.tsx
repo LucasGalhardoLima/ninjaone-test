@@ -7,18 +7,27 @@ import {
 import { Form, useActionData } from "@remix-run/react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { CloseIcon } from "~/assets/icons/close";
-import { action, isDeleteModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import {
+  action,
+  isDeleteModalOpenAtom,
+  selectedDeviceAtom,
+} from "~/routes/_index";
 import { Button } from "./Button";
 import { useEffect } from "react";
 
 export const DeleteDeviceModal: React.FC = () => {
-    const actionData = useActionData<typeof action>();
+  const actionData = useActionData<typeof action>();
   const isOpen = useAtomValue(isDeleteModalOpenAtom);
   const openModal = useSetAtom(isDeleteModalOpenAtom);
   const device = useAtomValue(selectedDeviceAtom);
 
   const onClose = () => {
     openModal(false);
+  };
+
+  const handleClose = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    onClose();
   };
 
   useEffect(() => {
@@ -59,13 +68,14 @@ export const DeleteDeviceModal: React.FC = () => {
                   Delete device?
                 </DialogTitle>
                 <p>
-                  You are about to delete the device <strong>{device?.system_name}</strong>. This
-                  action cannot be undone.
+                  You are about to delete the device{" "}
+                  <strong>{device?.system_name}</strong>. This action cannot be
+                  undone.
                 </p>
                 <Form className="flex flex-col gap-3" method="delete">
                   <input type="hidden" name="id" value={device?.id} />
                   <div className="flex justify-end gap-2 mt-5">
-                    <Button.Root variant="outline" onClick={onClose}>
+                    <Button.Root variant="outline" onClick={handleClose}>
                       <Button.Label>Cancel</Button.Label>
                     </Button.Root>
                     <Button.Root variant="danger" type="submit">

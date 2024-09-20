@@ -4,7 +4,7 @@ import { cx } from "~/utils/helpers";
 interface ButtonRootProps {
   children: React.ReactNode;
   variant?: "primary" | "ghost" | "outline" | "danger";
-  onClick?: () => void;
+  onClick?: (() => void) | ((event: { preventDefault: () => void; }) => void);
   className?: string;
   ref?: React.Ref<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
