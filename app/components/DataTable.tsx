@@ -1,12 +1,9 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { isModalOpenAtom, loader, selectedDeviceAtom } from "~/routes/_index";
+import { useLoaderData } from "@remix-run/react";
+import { loader } from "~/routes/_index";
 import windows from "~/assets/images/windows.svg";
 import linux from "~/assets/images/linux.svg";
 import mac from "~/assets/images/mac.svg";
-import { Button } from "./Button";
-import { ActionIcon } from "~/assets/icons/action";
-import { useAtom, useSetAtom } from "jotai";
-import { Device } from "~/services/devices";
+import { TableItemDropdown } from "./TableItemDropdown";
 
 const Icons = {
   WINDOWS: windows,
@@ -15,20 +12,7 @@ const Icons = {
 };
 
 export const DataTable: React.FC = () => {
-  const fetcher = useFetcher();
   const { devices } = useLoaderData<typeof loader>();
-  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
-  const openEditModal = useSetAtom(isModalOpenAtom);
-
-  const toggleDropdown = (device: Device) => {
-    setSelectedDevice(selectedDevice?.id === device.id ? undefined : device);
-  };
-
-  const deleteDevice = (id: string) => {
-    const formData = new FormData();
-    formData.append("id", id);
-    fetcher.submit(formData, { method: "DELETE" });
-  };
 
   return (
     <>
@@ -52,28 +36,7 @@ export const DataTable: React.FC = () => {
                 <span>{device.system_name}</span>
               </td>
               <td className="px-4 py-2 relative w-5">
-                <Button.Root
-                  variant="ghost"
-                  onClick={() => toggleDropdown(device)}
-                >
-                  <Button.Icon icon={<ActionIcon />} variant="ghost" />
-                </Button.Root>
-                {selectedDevice?.id === device.id && (
-                  <div className="absolute right-5 mt-2 w-32 bg-white shadow-lg rounded-md z-10">
-                    <ul className="py-1 text-sm text-gray-700">
-                      <button
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-full text-left"
-                        onClick={() => openEditModal(true)}
-                      >
-                        Edit
-                      </button>
-                      <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-full text-left text-[#D53948]"
-                        onClick={() => device?.id && deleteDevice(device.id)}>
-                        Delete
-                      </button>
-                    </ul>
-                  </div>
-                )}
+                <TableItemDropdown device={device} />
               </td>
             </tr>
           ))}

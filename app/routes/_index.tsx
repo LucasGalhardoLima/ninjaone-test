@@ -48,6 +48,10 @@ const parseFormData = (method: string, formData: FormData) => {
   const type = formData.get("type");
   const id = formData.get("id");
 
+  if (method === "DELETE") {
+    return { id: String(id) };
+  }
+
   if (
     typeof system_name !== "string" ||
     typeof hdd_capacity !== "string" ||
@@ -84,15 +88,15 @@ export const action = async ({
     const parsedData = parseFormData(request.method, formData);
 
     const errors = validateDeviceForm(formData);
-    if (errors) {
+    if (errors && request.method !== "DELETE") {
       return json({ status: 400, errors });
     }
 
     let device;
     if (request.method === "POST") {
-      device = await createDevice(parsedData);
+      device = await createDevice(parsedData as Device);
     } else if (request.method === "PUT") {
-      device = await updateDevice(parsedData);
+      device = await updateDevice(parsedData as Device);
     } else if (request.method === "DELETE") {
       if (parsedData?.id) {
         device = await deleteDevice(parsedData.id);
