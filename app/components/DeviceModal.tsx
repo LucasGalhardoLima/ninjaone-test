@@ -10,6 +10,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { action, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
 import { useActionData, Form } from "@remix-run/react";
+import { Button } from "./Button";
 
 export const DeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
@@ -66,9 +67,6 @@ export const DeviceModal: React.FC = () => {
                   className="flex flex-col gap-3"
                   method={isEdit ? "put" : "post"}
                 >
-                  {isEdit && device?.id && (
-                    <input type="hidden" name="id" value={device.id} />
-                  )}
                   <div>
                     <label
                       htmlFor="system_name"
@@ -86,9 +84,11 @@ export const DeviceModal: React.FC = () => {
                         defaultValue={isEdit ? device?.system_name : ""}
                       />
                     </div>
-                    <p className="text-sm text-red-500">
-                      {errors?.system_name}
-                    </p>
+                    {errors?.system_name && (
+                      <p className="text-sm text-red-500">
+                        {errors.system_name}
+                      </p>
+                    )}
                   </div>
                   <div className="mt-2">
                     <label
@@ -113,7 +113,9 @@ export const DeviceModal: React.FC = () => {
                         <DropdownIcon className="fill-[#6E6D7A]" />
                       </div>
                     </div>
-                    <p className="text-sm text-red-500">{errors?.type}</p>
+                    {errors?.type && (
+                      <p className="text-sm text-red-500">{errors.type}</p>
+                    )}
                   </div>
                   <div className="mt-2">
                     <label
@@ -132,13 +134,20 @@ export const DeviceModal: React.FC = () => {
                         defaultValue={isEdit ? device?.hdd_capacity : ""}
                       />
                     </div>
-                    <p className="text-sm text-red-500">
-                      {errors?.hdd_capacity}
-                    </p>
+                    {errors?.hdd_capacity && (
+                      <p className="text-sm text-red-500">
+                        {errors.hdd_capacity}
+                      </p>
+                    )}
                   </div>
-                  <button type="submit" className="mt-6">
-                    {isEdit ? "Save" : "Add"}
-                  </button>
+                  <div className="flex justify-end gap-2 mt-5">
+                    <Button.Root variant="outline" onClick={onClose}>
+                      <Button.Label>Cancel</Button.Label>
+                    </Button.Root>
+                    <Button.Root type="submit">
+                      <Button.Label>{isEdit ? "Save" : "Submit"}</Button.Label>
+                    </Button.Root>
+                  </div>
                 </Form>
               </div>
             </div>

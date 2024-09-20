@@ -2,10 +2,9 @@ import React, { forwardRef } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useAtom, useSetAtom } from "jotai";
 import { ActionIcon } from "~/assets/icons/action";
-import { isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import { isDeleteModalOpenAtom, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
 import { Device } from "~/services/devices";
 import { Button } from "./Button";
-import { useFetcher } from "@remix-run/react";
 
 interface TableItemDropdownProps {
   device: Device;
@@ -29,18 +28,12 @@ MenuButtonComponent.displayName = "MenuButton";
 export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   device,
 }) => {
-  const fetcher = useFetcher();
   const openEditModal = useSetAtom(isModalOpenAtom);
+  const openDeleteModal = useSetAtom(isDeleteModalOpenAtom);
   const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
 
   const toggleDropdown = (device: Device) => {
     setSelectedDevice(selectedDevice?.id === device.id ? undefined : device);
-  };
-
-  const deleteDevice = (id: string) => {
-    const formData = new FormData();
-    formData.append("id", id);
-    fetcher.submit(formData, { method: "DELETE" });
   };
 
   const handleClickEdit = () => {
@@ -49,7 +42,7 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
 
   const handleClickDelete = () => {
     if (device.id) {
-      deleteDevice(device.id);
+      openDeleteModal(true);
     }
   };
 
@@ -65,7 +58,7 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
       <MenuItems
         transition
         anchor="bottom end"
-        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-sm bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <div className="py-1">
           <MenuItem>

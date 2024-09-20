@@ -6,6 +6,7 @@ import {
 } from "@remix-run/node";
 import { atom } from "jotai";
 import { DataTable } from "~/components/DataTable";
+import { DeleteDeviceModal } from "~/components/DeleteDeviceModal";
 import { DeviceModal } from "~/components/DeviceModal";
 import { DevicesHeader } from "~/components/DevicesHeader";
 import { TableFilters } from "~/components/TableFilters";
@@ -25,6 +26,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const isModalOpenAtom = atom(false);
+
+export const isDeleteModalOpenAtom = atom(false);
 
 export const selectedDeviceAtom = atom<Device>();
 
@@ -118,6 +121,7 @@ export default function Index() {
       <TableFilters />
       <DataTable />
       <DeviceModal />
+      <DeleteDeviceModal />
     </div>
   );
 }
