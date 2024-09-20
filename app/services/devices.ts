@@ -64,3 +64,19 @@ export const updateDevice = async (device: Device): Promise<Device> => {
 
   return updatedDevice;
 };
+
+export const deleteDevice = async (id: string): Promise<void> => {
+  const response = await fetch(`${BASE_URL}/devices/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete device");
+  }
+
+  return await response.json();
+};

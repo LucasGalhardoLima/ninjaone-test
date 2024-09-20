@@ -11,6 +11,7 @@ import { DevicesHeader } from "~/components/DevicesHeader";
 import { TableFilters } from "~/components/TableFilters";
 import {
   createDevice,
+  deleteDevice,
   Device,
   getDevices,
   updateDevice,
@@ -92,11 +93,15 @@ export const action = async ({
       device = await createDevice(parsedData);
     } else if (request.method === "PUT") {
       device = await updateDevice(parsedData);
+    } else if (request.method === "DELETE") {
+      if (parsedData?.id) {
+        device = await deleteDevice(parsedData.id);
+      } else {
+        throw new Error("Device ID is required for deletion");
+      }
     }
 
-    console.log(device);
-
-    return json({ status: 200, device });
+    return json({ status: 200, device: device ?? undefined });
   } catch (error) {
     return json({ status: 500, message: (error as Error).message });
   }

@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { isModalOpenAtom, loader, selectedDeviceAtom } from "~/routes/_index";
 import windows from "~/assets/images/windows.svg";
 import linux from "~/assets/images/linux.svg";
@@ -15,12 +15,19 @@ const Icons = {
 };
 
 export const DataTable: React.FC = () => {
+  const fetcher = useFetcher();
   const { devices } = useLoaderData<typeof loader>();
   const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
   const openEditModal = useSetAtom(isModalOpenAtom);
 
   const toggleDropdown = (device: Device) => {
     setSelectedDevice(selectedDevice?.id === device.id ? undefined : device);
+  };
+
+  const deleteDevice = (id: string) => {
+    const formData = new FormData();
+    formData.append("id", id);
+    fetcher.submit(formData, { method: "DELETE" });
   };
 
   return (
@@ -60,7 +67,8 @@ export const DataTable: React.FC = () => {
                       >
                         Edit
                       </button>
-                      <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-full text-left text-[#D53948]">
+                      <button className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-full text-left text-[#D53948]"
+                        onClick={() => device?.id && deleteDevice(device.id)}>
                         Delete
                       </button>
                     </ul>
