@@ -1,9 +1,9 @@
 const BASE_URL = "http://localhost:3000";
 
 export interface Device {
-  readonly id?: number;
+  readonly id?: string;
   readonly system_name: string;
-  readonly value: number;
+  readonly hdd_capacity: number;
   readonly type: string;
 }
 
@@ -42,6 +42,25 @@ export const createDevice = async (device: Device): Promise<Device> => {
   }
 
   const createdDevice = (await response.json()) as Device;
-  
+
   return createdDevice;
+};
+
+export const updateDevice = async (device: Device): Promise<Device> => {
+  const response = await fetch(`${BASE_URL}/devices/${device.id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(device),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update device");
+  }
+
+  const updatedDevice = (await response.json()) as Device;
+
+  return updatedDevice;
 };

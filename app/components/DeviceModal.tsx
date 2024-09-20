@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { CloseIcon } from "~/assets/icons/close";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { action, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
 import { useActionData, Form } from "@remix-run/react";
@@ -16,7 +16,7 @@ export const DeviceModal: React.FC = () => {
   const errors =
     actionData && "errors" in actionData ? actionData.errors : undefined;
   const isOpen = useAtomValue(isModalOpenAtom);
-  const [device, setDevice] = useAtom(selectedDeviceAtom);
+  const device = useAtomValue(selectedDeviceAtom);
   const openModal = useSetAtom(isModalOpenAtom);
 
   const onClose = () => {
@@ -26,7 +26,7 @@ export const DeviceModal: React.FC = () => {
   const isEdit = !!device;
 
   useEffect(() => {
-    if (actionData && 'status' in actionData && actionData.status === 200) {
+    if (actionData && "status" in actionData && actionData.status === 200) {
       openModal(false);
     }
   }, [actionData, openModal]);
@@ -62,7 +62,13 @@ export const DeviceModal: React.FC = () => {
                 >
                   {isEdit ? "Edit Device" : "Add Device"}
                 </DialogTitle>
-                <Form className="flex flex-col gap-3" method="post">
+                <Form
+                  className="flex flex-col gap-3"
+                  method={isEdit ? "put" : "post"}
+                >
+                  {isEdit && device?.id && (
+                    <input type="hidden" name="id" value={device.id} />
+                  )}
                   <div>
                     <label
                       htmlFor="system_name"
@@ -77,6 +83,7 @@ export const DeviceModal: React.FC = () => {
                         id="system_name"
                         className="block w-full outline-none"
                         placeholder="System name"
+                        defaultValue={isEdit ? device?.system_name : ""}
                       />
                     </div>
                     <p className="text-sm text-red-500">
@@ -95,7 +102,7 @@ export const DeviceModal: React.FC = () => {
                         className="border border-gray-300 rounded-md p-2 pr-8 bg-white cursor-pointer outline-none appearance-none w-full"
                         name="type"
                         id="type"
-                        defaultValue=""
+                        defaultValue={isEdit ? device?.type : ""}
                       >
                         <option value="">Device type</option>
                         <option value="WINDOWS">Windows</option>
@@ -110,7 +117,7 @@ export const DeviceModal: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <label
-                      htmlFor="value"
+                      htmlFor="hdd_capacity"
                       className="block text-sm font-normal text-gray-700"
                     >
                       HDD capacity (GB) *
@@ -118,13 +125,16 @@ export const DeviceModal: React.FC = () => {
                     <div className="mt-1 w-full border border-gray-300 rounded-md p-2 px-3">
                       <input
                         type="text"
-                        name="value"
-                        id="value"
+                        name="hdd_capacity"
+                        id="hdd_capacity"
                         className="block w-full outline-none"
                         placeholder="HDD capacity"
+                        defaultValue={isEdit ? device?.hdd_capacity : ""}
                       />
                     </div>
-                    <p className="text-sm text-red-500">{errors?.value}</p>
+                    <p className="text-sm text-red-500">
+                      {errors?.hdd_capacity}
+                    </p>
                   </div>
                   <button type="submit" className="mt-6">
                     {isEdit ? "Save" : "Add"}

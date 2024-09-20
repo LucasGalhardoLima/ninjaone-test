@@ -9,7 +9,12 @@ import { DataTable } from "~/components/DataTable";
 import { DeviceModal } from "~/components/DeviceModal";
 import { DevicesHeader } from "~/components/DevicesHeader";
 import { TableFilters } from "~/components/TableFilters";
-import { createDevice, Device, getDevices } from "~/services/devices";
+import {
+  createDevice,
+  Device,
+  getDevices,
+  updateDevice,
+} from "~/services/devices";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,60 +23,84 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
-  const devices = await getDevices();
+export const isModalOpenAtom = atom(false);
 
-  return json({ devices });
-}
+export const selectedDeviceAtom = atom<Device>();
 
-const validateDevice = (formData: FormData) => {
-  const systemName = formData.get("system_name");
-  const value = formData.get("value");
-  const type = formData.get("type");
+const validateDeviceForm = (formData: FormData) => {
+  const errors: { [key: string]: string } = {};
 
-  const errors = {} as {
-    [key: string]: string;
-  };
+  const requiredFields = ["system_name", "hdd_capacity", "type"] as const;
 
-  if (!systemName) {
-    errors["system_name"] = "System name is required";
-  }
-
-  if (!value) {
-    errors["value"] = "Value is required";
-  }
-
-  if (!type) {
-    errors["type"] = "Type is required";
-  }
+  requiredFields.forEach((field) => {
+    if (!formData.get(field)) {
+      errors[field] = `${field.replace("_", " ")} is required`;
+    }
+  });
 
   return Object.keys(errors).length ? errors : null;
+};
+
+const parseFormData = (method: string, formData: FormData) => {
+  const system_name = formData.get("system_name");
+  const hdd_capacity = formData.get("hdd_capacity");
+  const type = formData.get("type");
+  const id = formData.get("id");
+
+  if (
+    typeof system_name !== "string" ||
+    typeof hdd_capacity !== "string" ||
+    typeof type !== "string"
+  ) {
+    throw new Error("Invalid form data");
+  }
+
+  return {
+    id: id ? String(id) : undefined,
+    system_name,
+    hdd_capacity: parseFloat(hdd_capacity),
+    type,
+  };
+};
+
+export const loader = async () => {
+  const devices = await getDevices();
+
+  return json({ status: 200, devices });
 };
 
 export const action = async ({
   request,
 }: ActionFunctionArgs): Promise<
-  TypedResponse<{ errors: { [key: string]: string } } | { device: Device }>
+  TypedResponse<
+    | { errors: { [key: string]: string } }
+    | { status: number; device: Device | undefined }
+    | { message: string }
+  >
 > => {
-  const formData = await request.formData();
+  try {
+    const formData = await request.formData();
+    const parsedData = parseFormData(request.method, formData);
 
-  const errors = validateDevice(formData);
-  if (errors) {
-    return json({ status: 400, errors });
+    const errors = validateDeviceForm(formData);
+    if (errors) {
+      return json({ status: 400, errors });
+    }
+
+    let device;
+    if (request.method === "POST") {
+      device = await createDevice(parsedData);
+    } else if (request.method === "PUT") {
+      device = await updateDevice(parsedData);
+    }
+
+    console.log(device);
+
+    return json({ status: 200, device });
+  } catch (error) {
+    return json({ status: 500, message: (error as Error).message });
   }
-
-  const device = await createDevice({
-    system_name: formData.get("system_name") as string,
-    value: parseFloat(formData.get("value") as string),
-    type: formData.get("type") as string,
-  });
-
-  return json({ status: 200, device });
 };
-
-export const isModalOpenAtom = atom(false);
-
-export const selectedDeviceAtom = atom<Device>();
 
 export default function Index() {
   return (
