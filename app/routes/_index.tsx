@@ -73,8 +73,7 @@ const parseFormData = (method: string, formData: FormData) => {
 
 export const loader = async () => {
   const devices = await getDevices();
-
-  return json({ status: 200, devices });
+  return json({ devices });
 };
 
 export const action = async ({

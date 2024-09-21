@@ -1,10 +1,11 @@
 import React, { forwardRef } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { ActionIcon } from "~/assets/icons/action";
-import { isDeleteModalOpenAtom, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import { isDeleteModalOpenAtom, isModalOpenAtom } from "~/routes/_index";
 import { Device } from "~/services/devices";
 import { Button } from "./Button";
+import { useFetcher } from "@remix-run/react";
 
 interface TableItemDropdownProps {
   device: Device;
@@ -28,12 +29,12 @@ MenuButtonComponent.displayName = "MenuButton";
 export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   device,
 }) => {
+  const fetcher = useFetcher();
   const openEditModal = useSetAtom(isModalOpenAtom);
   const openDeleteModal = useSetAtom(isDeleteModalOpenAtom);
-  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
 
   const toggleDropdown = (device: Device) => {
-    setSelectedDevice(selectedDevice?.id === device.id ? undefined : device);
+    fetcher.load(`/${device.id}`);
   };
 
   const handleClickEdit = () => {

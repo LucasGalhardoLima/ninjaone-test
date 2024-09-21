@@ -7,18 +7,24 @@ import {
 } from "@headlessui/react";
 import { CloseIcon } from "~/assets/icons/close";
 import { useAtomValue, useSetAtom } from "jotai";
-import { action, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import { action, isModalOpenAtom } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
-import { useActionData, Form } from "@remix-run/react";
+import { useActionData, Form, useFetchers } from "@remix-run/react";
 import { Button } from "./Button";
 
 export const DeviceModal: React.FC = () => {
+  const fetchers = useFetchers();
   const actionData = useActionData<typeof action>();
   const errors =
     actionData && "errors" in actionData ? actionData.errors : undefined;
   const isOpen = useAtomValue(isModalOpenAtom);
-  const device = useAtomValue(selectedDeviceAtom);
   const openModal = useSetAtom(isModalOpenAtom);
+
+  let device;
+
+  if (fetchers.length > 0) {
+    device = fetchers[0].data.device;
+  }
 
   const onClose = () => {
     openModal(false);

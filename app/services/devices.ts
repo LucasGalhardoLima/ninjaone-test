@@ -27,6 +27,23 @@ export const getDevices = async (): Promise<Device[]> => {
   return devices;
 };
 
+export const getDevice = async (id: string): Promise<Device> => {
+  const response = await fetch(`${BASE_URL}/devices/${id}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch device");
+  }
+
+  const device = (await response.json()) as Device;
+
+  return device;
+};
+
 export const createDevice = async (device: Device): Promise<Device> => {
   const response = await fetch(`${BASE_URL}/devices`, {
     method: "POST",
