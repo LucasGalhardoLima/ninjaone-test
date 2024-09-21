@@ -2,9 +2,19 @@ import { PlusIcon } from "~/assets/icons/plus";
 import { Button } from "./Button";
 import { ModalType, useDevicesStore } from "~/stores/devices";
 
-export const DevicesHeader: React.FC = () => {
+/**
+ * A React component for displaying the header of the devices page.
+ *
+ * @returns {JSX.Element} A JSX element containing the page header.
+ */
+
+export const DevicesHeader: React.FC = (): JSX.Element => {
   const openAddDeviceModal = useDevicesStore((state) => state.openModal);
 
+  /**
+   * Handles the click event for the "Add Device" button. Opens the
+   * {@link DeviceModal} with the type set to {@link ModalType.ADD}.
+   */
   const handleClick = () => {
     openAddDeviceModal(ModalType.ADD);
   };

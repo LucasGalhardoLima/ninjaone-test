@@ -61,20 +61,22 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
       >
         <div className="py-1">
           <MenuItem>
-            <button
+            <Button.Root
+              variant="ghost"
               onClick={handleClickEdit}
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+              className="w-full font-normal"
             >
-              Edit
-            </button>
+              <Button.Label>Edit</Button.Label>
+            </Button.Root>
           </MenuItem>
           <MenuItem>
-            <button
+            <Button.Root
+              variant="ghost"
               onClick={handleClickDelete}
-              className="block w-full text-left px-4 py-2 text-sm text-[#D53948] data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+              className="w-full text-[#D53948] font-normal"
             >
-              Delete
-            </button>
+              <Button.Label>Delete</Button.Label>
+            </Button.Root>
           </MenuItem>
         </div>
       </MenuItems>
