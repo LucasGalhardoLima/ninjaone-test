@@ -1,14 +1,9 @@
 import React, { forwardRef } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useSetAtom } from "jotai";
 import { ActionIcon } from "~/assets/icons/action";
-import {
-  isDeleteModalOpenAtom,
-  isModalOpenAtom,
-  selectedDeviceAtom,
-} from "~/routes/_index";
 import { Device } from "~/services/devices";
 import { Button } from "./Button";
+import { useDevicesStore } from "~/stores/devices";
 
 interface TableItemDropdownProps {
   device: Device;
@@ -32,21 +27,21 @@ MenuButtonComponent.displayName = "MenuButton";
 export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   device,
 }) => {
-  const openEditModal = useSetAtom(isModalOpenAtom);
-  const openDeleteModal = useSetAtom(isDeleteModalOpenAtom);
-  const setSelectedDevice = useSetAtom(selectedDeviceAtom);
+  const openEditModal = useDevicesStore((state) => state.openModal);
+  const openDeleteModal = useDevicesStore((state) => state.openDeleteModal);
+  const selectDevice = useDevicesStore((state) => state.setSelectedDevice);
 
   const toggleDropdown = () => {
-    setSelectedDevice(device);
+    selectDevice(device);
   };
 
   const handleClickEdit = () => {
-    openEditModal(true);
+    openEditModal();
   };
 
   const handleClickDelete = () => {
     if (device.id) {
-      openDeleteModal(true);
+      openDeleteModal();
     }
   };
 

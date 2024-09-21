@@ -6,25 +6,29 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { CloseIcon } from "~/assets/icons/close";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { action, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import { action } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
 import { useActionData, Form } from "@remix-run/react";
 import { Button } from "./Button";
+import { useDevicesStore } from "~/stores/devices";
+import { Device } from "~/services/devices";
 
 export const DeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
-  const isOpen = useAtomValue(isModalOpenAtom);
-  const openModal = useSetAtom(isModalOpenAtom);
-  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
+  const isOpen = useDevicesStore((state) => state.isModalOpen);
+  const closeModal = useDevicesStore((state) => state.closeModal);
+  const selectedDevice = useDevicesStore((state) => state.selectedDevice);
+  const setSelectedDevice = useDevicesStore(
+    (state) => state.setSelectedDevice
+  ) as (device: Device | null) => void;
 
   const errors =
     actionData && "errors" in actionData ? actionData.errors : undefined;
 
   const onClose = useCallback(() => {
-    openModal(false);
-    setSelectedDevice(undefined);
-  }, [openModal, setSelectedDevice]);
+    closeModal();
+    setSelectedDevice(null);
+  }, [closeModal, setSelectedDevice]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();

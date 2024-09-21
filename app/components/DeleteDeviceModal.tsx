@@ -5,26 +5,26 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { Form, useActionData } from "@remix-run/react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { CloseIcon } from "~/assets/icons/close";
-import {
-  action,
-  isDeleteModalOpenAtom,
-  selectedDeviceAtom,
-} from "~/routes/_index";
+import { action } from "~/routes/_index";
 import { Button } from "./Button";
 import { useEffect, useCallback } from "react";
+import { useDevicesStore } from "~/stores/devices";
+import { Device } from "~/services/devices";
 
 export const DeleteDeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
-  const isOpen = useAtomValue(isDeleteModalOpenAtom);
-  const openModal = useSetAtom(isDeleteModalOpenAtom);
-  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
+  const isOpen = useDevicesStore((state) => state.isDeleteModalOpen);
+  const closeModal = useDevicesStore((state) => state.closeDeleteModal);
+  const selectedDevice = useDevicesStore((state) => state.selectedDevice);
+  const setSelectedDevice = useDevicesStore(
+    (state) => state.setSelectedDevice
+  ) as (device: Device | null) => void;
 
   const onClose = useCallback(() => {
-    openModal(false);
-    setSelectedDevice(undefined);
-  }, [openModal, setSelectedDevice]);
+    closeModal();
+    setSelectedDevice(null);
+  }, [closeModal, setSelectedDevice]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();

@@ -4,7 +4,6 @@ import {
   TypedResponse,
   type MetaFunction,
 } from "@remix-run/node";
-import { atom } from "jotai";
 import { DataTable } from "~/components/DataTable";
 import { DeleteDeviceModal } from "~/components/DeleteDeviceModal";
 import { DeviceModal } from "~/components/DeviceModal";
@@ -25,12 +24,6 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "NinjaOne React Dev Showcase" },
   ];
 };
-
-export const isModalOpenAtom = atom(false);
-
-export const isDeleteModalOpenAtom = atom(false);
-
-export const selectedDeviceAtom = atom<Device>();
 
 export const loader = async () => {
   const devices = await getDevices();

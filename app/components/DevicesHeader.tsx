@@ -1,15 +1,17 @@
 import { PlusIcon } from "~/assets/icons/plus";
 import { Button } from "./Button";
-import { useSetAtom } from "jotai";
-import { isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
+import { useDevicesStore } from "~/stores/devices";
+import { Device } from "~/services/devices";
 
 export const DevicesHeader: React.FC = () => {
-  const openAddDeviceModal = useSetAtom(isModalOpenAtom);
-  const setDevice = useSetAtom(selectedDeviceAtom);
+  const openAddDeviceModal = useDevicesStore((state) => state.openModal);
+  const setDevice = useDevicesStore((state) => state.setSelectedDevice) as (
+    device: Device | null
+  ) => void;
 
   const handleClick = () => {
-    openAddDeviceModal(true);
-    setDevice(undefined);
+    openAddDeviceModal();
+    setDevice(null);
   };
 
   return (
