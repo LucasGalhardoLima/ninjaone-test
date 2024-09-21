@@ -1,7 +1,19 @@
 import { SearchIcon } from "~/assets/icons/search";
 import { useDevicesStore } from "~/stores/devices";
 
-export const SystemNameFilter: React.FC = () => {
+/**
+ * A search input for filtering devices by system name.
+ *
+ * This component uses the `useDevicesStore` hook to get and set the
+ * `filterSystemName` state in the `DevicesStore` zustand store.
+ *
+ * @returns {JSX.Element} A search input with a search icon and a
+ *   placeholder label of "Search". The input value is updated in real-time
+ *   by the user, and the `DevicesStore.filterSystemName` is updated
+ *   whenever the input value is changed. If the input is empty, the
+ *   `DevicesStore.filterSystemName` is set to null.
+ */
+export const SystemNameFilter: React.FC = (): JSX.Element => {
   const filterSystemName = useDevicesStore((state) => state.filterSystemName);
   const setFilterSystemName = useDevicesStore(
     (state) => state.setFilterSystemName

@@ -6,7 +6,12 @@ interface DeviceOption {
   label: string;
 }
 
-export const DeviceTypeFilter: React.FC = () => {
+/**
+ * A dropdown menu for filtering devices by type.
+ *
+ * @returns {JSX.Element} A select element with options for all device types.
+ */
+export const DeviceTypeFilter: React.FC = (): JSX.Element => {
   const filterType = useDevicesStore((state) => state.filterType);
   const setFilterType = useDevicesStore((state) => state.setFilterType);
 

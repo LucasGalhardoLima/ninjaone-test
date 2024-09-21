@@ -1,7 +1,14 @@
 import { DropdownIcon } from "~/assets/icons/dropdown";
 import { SortOption, useDevicesStore } from "~/stores/devices";
 
-export const SortFilter: React.FC = () => {
+/**
+ * A dropdown menu for sorting devices by various criteria.
+ *
+ * @returns {JSX.Element} A select element with options for sorting devices by
+ *   HDD capacity (ascending and descending), name (ascending and descending),
+ *   and none.
+ */
+export const SortFilter: React.FC = (): JSX.Element => {
   const sortOption = useDevicesStore((state) => state.sortOption);
   const setSortOption = useDevicesStore((state) => state.setSortOption);
 
@@ -26,15 +33,16 @@ export const SortFilter: React.FC = () => {
       label: "Sort by: Name (descending)",
       value: SortOption.SYSTEM_NAME_DESC,
     },
+    {/* The API doesn't provide a price key in the Device type */}
   ];
 
-    /**
+  /**
    * Handles change events for the sort order dropdown. Sets the
    * {@link DevicesStore.sortOption} to the selected value.
    */
-    const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSortOption(event.target.value as SortOption);
-      };
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value as SortOption);
+  };
   return (
     <div className="relative w-full md:w-auto">
       <select
@@ -48,7 +56,6 @@ export const SortFilter: React.FC = () => {
             {option.label}
           </option>
         ))}
-        {/* The API doesn't provide a price key in the Device type */}
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
         <DropdownIcon className="fill-[#6E6D7A]" />

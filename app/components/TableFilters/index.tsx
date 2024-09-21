@@ -6,7 +6,13 @@ import { SortFilter } from "./SortFilter";
 import { DeviceTypeFilter } from "./DeviceTypeFilter";
 import { SystemNameFilter } from "./SystemNameFilter";
 
-export const TableFilters: React.FC = () => {
+/**
+ * A React component for displaying a set of filters and sort options for the
+ * devices table.
+ *
+ * @returns {JSX.Element} A JSX element containing the filters and sort options.
+ */
+export const TableFilters: React.FC = (): JSX.Element => {
   const clearFilters = useDevicesStore((state) => state.clearAllFilters);
 
   /**
