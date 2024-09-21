@@ -1,5 +1,5 @@
 import { create, StateCreator } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import { Device } from "~/services/devices";
 
 export enum ModalType {
@@ -8,14 +8,21 @@ export enum ModalType {
   DELETE = "DELETE",
 }
 
+export enum FilterOption {
+  ALL = "all",
+  WINDOWS = "WINDOWS",
+  MAC = "MAC",
+  LINUX = "LINUX",
+}
+
 export enum SortOption {
   HDD_CAPACITY_ASC = "hdd_capacity_asc",
   HDD_CAPACITY_DESC = "hdd_capacity_desc",
-  PRICE_LOW_TO_HIGH = "price_low_to_high",
-  PRICE_HIGH_TO_LOW = "price_high_to_low",
+  SYSTEM_NAME_ASC = "system_name_asc",
+  SYSTEM_NAME_DESC = "system_name_desc",
 }
 
-interface DevicesStore {
+export interface DevicesStore {
   devices: Device[];
   filteredDevices: Device[];
   setDevices: (devices: Device[]) => void;
@@ -24,17 +31,18 @@ interface DevicesStore {
   modalType: ModalType;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
-  filterType: string | null;
-  setFilterType: (type: string | null) => void;
+  filterType: FilterOption | null;
+  setFilterType: (type: FilterOption | null) => void;
   filterSystemName: string | null;
   setFilterSystemName: (name: string | null) => void;
   sortOption: SortOption | null;
   setSortOption: (option: SortOption | null) => void;
   applyFiltersAndSort: () => void;
+  clearAllFilters: () => void;
 }
 
 const myMiddlewares = (f: StateCreator<DevicesStore>) =>
-  devtools(persist(f, { name: "devicesStore" }));
+  devtools(f, { name: "devicesStore" });
 
 export const useDevicesStore = create<DevicesStore>()(
   myMiddlewares((set, get) => ({
@@ -51,7 +59,7 @@ export const useDevicesStore = create<DevicesStore>()(
     openModal: (type: ModalType) => set({ modalType: type }),
     closeModal: () => set({ modalType: ModalType.NONE, selectedDevice: null }),
     filterType: null,
-    setFilterType: (type: string | null) => {
+    setFilterType: (type: FilterOption | null) => {
       set({ filterType: type });
       get().applyFiltersAndSort();
     },
@@ -67,11 +75,14 @@ export const useDevicesStore = create<DevicesStore>()(
     },
     applyFiltersAndSort: () => {
       const { devices, filterType, filterSystemName, sortOption } = get();
-      let filteredDevices = devices;
+
+      let filteredDevices = [...devices];
 
       if (filterType) {
-        filteredDevices = filteredDevices.filter(
-          (device) => device.type === filterType
+        filteredDevices = filteredDevices.filter((device) =>
+          filterType === "all"
+            ? device.type !== "all"
+            : device.type === filterType
         );
       }
 
@@ -90,22 +101,21 @@ export const useDevicesStore = create<DevicesStore>()(
               return a.hdd_capacity - b.hdd_capacity;
             case SortOption.HDD_CAPACITY_DESC:
               return b.hdd_capacity - a.hdd_capacity;
-            case SortOption.PRICE_LOW_TO_HIGH:
-              return a.price - b.price;
-            case SortOption.PRICE_HIGH_TO_LOW:
-              return b.price - a.price;
+            case SortOption.SYSTEM_NAME_ASC:
+              return a.system_name.localeCompare(b.system_name);
+            case SortOption.SYSTEM_NAME_DESC:
+              return b.system_name.localeCompare(a.system_name);
             default:
               return 0;
           }
         });
       }
 
-      // If no filters or sorts are applied, return the original devices list
-      if (!filterType && !filterSystemName && !sortOption) {
-        filteredDevices = devices;
-      }
-
       set({ filteredDevices });
+    },
+    clearAllFilters: () => {
+      set({ filterType: null, filterSystemName: null, sortOption: null });
+      get().applyFiltersAndSort();
     },
   }))
 );

@@ -12,9 +12,6 @@ const Icons = {
 
 export const DataTable: React.FC = () => {
   const devices = useDevicesStore((state) => state.filteredDevices);
-  const staticDevices = useDevicesStore((state) => state.devices);
-
-  console.log(devices, staticDevices);
 
   return (
     <>

@@ -4,6 +4,8 @@ import {
   TypedResponse,
   type MetaFunction,
 } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { DataTable } from "~/components/DataTable";
 import { DeleteDeviceModal } from "~/components/DeleteDeviceModal";
 import { DeviceModal } from "~/components/DeviceModal";
@@ -28,8 +30,6 @@ export const meta: MetaFunction = () => {
 
 export const loader = async () => {
   const devices = await getDevices();
-  const setDevices = useDevicesStore.getState().setDevices;
-  setDevices(devices);
   return json({ devices });
 };
 
@@ -87,6 +87,13 @@ export const action = async ({
 };
 
 export default function Index() {
+  const { devices } = useLoaderData<typeof loader>();
+  const setDevices = useDevicesStore((state) => state.setDevices);
+
+  useEffect(() => {
+    setDevices(devices);
+  }, [setDevices, devices]);
+
   return (
     <div className="flex flex-col p-6">
       <DevicesHeader />
