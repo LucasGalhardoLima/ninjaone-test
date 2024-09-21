@@ -6,6 +6,7 @@ export enum ModalType {
   NONE = "NONE",
   EDIT = "EDIT",
   DELETE = "DELETE",
+  ADD = "ADD",
 }
 
 export enum FilterOption {

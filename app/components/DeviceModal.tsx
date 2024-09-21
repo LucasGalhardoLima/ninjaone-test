@@ -156,7 +156,7 @@ export const DeviceModal: React.FC = () => {
                       <Button.Label>Cancel</Button.Label>
                     </Button.Root>
                     <Button.Root type="submit">
-                      <Button.Label>{isEdit ? "Save" : "Submit"}</Button.Label>
+                      <Button.Label>Submit</Button.Label>
                     </Button.Root>
                   </div>
                 </Form>

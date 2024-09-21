@@ -6,7 +6,7 @@ interface ButtonLabelProps {
 }
 
 const ButtonLabel: React.FC<ButtonLabelProps> = ({ children }) => {
-  const labelClass = cx("text-sm font-weight-500");
+  const labelClass = cx("text-sm font-medium");
 
   return <span className={labelClass}>{children}</span>;
 };

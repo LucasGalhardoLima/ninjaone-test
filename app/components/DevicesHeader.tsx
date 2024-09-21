@@ -11,7 +11,7 @@ export const DevicesHeader: React.FC = () => {
 
   return (
     <div className="flex justify-between items-center">
-      <h1 className="font-weight-500 text-xl">Devices</h1>
+      <h1 className="font-medium text-xl">Devices</h1>
       <Button.Root variant="primary" onClick={handleClick}>
         <Button.Icon icon={<PlusIcon />} variant="primary" />
         <Button.Label>Add Device</Button.Label>
