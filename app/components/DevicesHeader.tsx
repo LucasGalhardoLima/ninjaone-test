@@ -1,17 +1,12 @@
 import { PlusIcon } from "~/assets/icons/plus";
 import { Button } from "./Button";
-import { useDevicesStore } from "~/stores/devices";
-import { Device } from "~/services/devices";
+import { ModalType, useDevicesStore } from "~/stores/devices";
 
 export const DevicesHeader: React.FC = () => {
   const openAddDeviceModal = useDevicesStore((state) => state.openModal);
-  const setDevice = useDevicesStore((state) => state.setSelectedDevice) as (
-    device: Device | null
-  ) => void;
 
   const handleClick = () => {
-    openAddDeviceModal();
-    setDevice(null);
+    openAddDeviceModal(ModalType.ADD);
   };
 
   return (

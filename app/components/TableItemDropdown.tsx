@@ -3,7 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ActionIcon } from "~/assets/icons/action";
 import { Device } from "~/services/devices";
 import { Button } from "./Button";
-import { useDevicesStore } from "~/stores/devices";
+import { ModalType, useDevicesStore } from "~/stores/devices";
 
 interface TableItemDropdownProps {
   device: Device;
@@ -28,7 +28,7 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   device,
 }) => {
   const openEditModal = useDevicesStore((state) => state.openModal);
-  const openDeleteModal = useDevicesStore((state) => state.openDeleteModal);
+  const openDeleteModal = useDevicesStore((state) => state.openModal);
   const selectDevice = useDevicesStore((state) => state.setSelectedDevice);
 
   const toggleDropdown = () => {
@@ -36,12 +36,12 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   };
 
   const handleClickEdit = () => {
-    openEditModal();
+    openEditModal(ModalType.EDIT);
   };
 
   const handleClickDelete = () => {
     if (device.id) {
-      openDeleteModal();
+      openDeleteModal(ModalType.DELETE);
     }
   };
 

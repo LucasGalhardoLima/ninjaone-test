@@ -9,22 +9,16 @@ import { CloseIcon } from "~/assets/icons/close";
 import { action } from "~/routes/_index";
 import { Button } from "./Button";
 import { useEffect, useCallback } from "react";
-import { useDevicesStore } from "~/stores/devices";
-import { Device } from "~/services/devices";
-
+import { ModalType, useDevicesStore } from "~/stores/devices";
 export const DeleteDeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
-  const isOpen = useDevicesStore((state) => state.isDeleteModalOpen);
-  const closeModal = useDevicesStore((state) => state.closeDeleteModal);
+  const isOpen = useDevicesStore((state) => state.modalType === ModalType.DELETE);
+  const closeModal = useDevicesStore((state) => state.closeModal);
   const selectedDevice = useDevicesStore((state) => state.selectedDevice);
-  const setSelectedDevice = useDevicesStore(
-    (state) => state.setSelectedDevice
-  ) as (device: Device | null) => void;
 
   const onClose = useCallback(() => {
     closeModal();
-    setSelectedDevice(null);
-  }, [closeModal, setSelectedDevice]);
+  }, [closeModal]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();

@@ -2,15 +2,19 @@ import { create, StateCreator } from "zustand";
 import { Device } from "~/services/devices";
 import { devtools, persist } from "zustand/middleware";
 
-export interface DevicesStore {
+export enum ModalType {
+  NONE = "NONE",
+  EDIT = "EDIT",
+  DELETE = "DELETE",
+  ADD = "ADD",
+}
+
+interface DevicesStore {
   selectedDevice: Device | null;
-  setSelectedDevice: (device: Device) => void;
-  isModalOpen: boolean;
-  openModal: () => void;
+  setSelectedDevice: (device: Device | null) => void;
+  modalType: ModalType;
+  openModal: (type: ModalType) => void;
   closeModal: () => void;
-  isDeleteModalOpen: boolean;
-  openDeleteModal: () => void;
-  closeDeleteModal: () => void;
 }
 
 const myMiddlewares = (f: StateCreator<DevicesStore>) =>
@@ -20,12 +24,9 @@ export const useDevicesStore = create<DevicesStore>()(
   myMiddlewares((set) => ({
     selectedDevice: null,
     setSelectedDevice: (device: Device | null) =>
-      device ? set({ selectedDevice: device }) : set({ selectedDevice: null }),
-    isModalOpen: false,
-    openModal: () => set({ isModalOpen: true }),
-    closeModal: () => set({ isModalOpen: false }),
-    isDeleteModalOpen: false,
-    openDeleteModal: () => set({ isDeleteModalOpen: true }),
-    closeDeleteModal: () => set({ isDeleteModalOpen: false }),
+      set({ selectedDevice: device }),
+    modalType: ModalType.NONE,
+    openModal: (type: ModalType) => set({ modalType: type }),
+    closeModal: () => set({ modalType: ModalType.NONE, selectedDevice: null }),
   }))
 );

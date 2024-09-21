@@ -10,25 +10,23 @@ import { action } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
 import { useActionData, Form } from "@remix-run/react";
 import { Button } from "./Button";
-import { useDevicesStore } from "~/stores/devices";
-import { Device } from "~/services/devices";
+import { ModalType, useDevicesStore } from "~/stores/devices";
 
 export const DeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
-  const isOpen = useDevicesStore((state) => state.isModalOpen);
+  const isOpen = useDevicesStore(
+    (state) =>
+      state.modalType === ModalType.EDIT || state.modalType === ModalType.ADD
+  );
   const closeModal = useDevicesStore((state) => state.closeModal);
   const selectedDevice = useDevicesStore((state) => state.selectedDevice);
-  const setSelectedDevice = useDevicesStore(
-    (state) => state.setSelectedDevice
-  ) as (device: Device | null) => void;
 
   const errors =
     actionData && "errors" in actionData ? actionData.errors : undefined;
 
   const onClose = useCallback(() => {
     closeModal();
-    setSelectedDevice(null);
-  }, [closeModal, setSelectedDevice]);
+  }, [closeModal]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();
