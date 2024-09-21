@@ -1,9 +1,8 @@
-import { useLoaderData } from "@remix-run/react";
-import { loader } from "~/routes/_index";
 import windows from "~/assets/images/windows.svg";
 import linux from "~/assets/images/linux.svg";
 import mac from "~/assets/images/mac.svg";
 import { TableItemDropdown } from "./TableItemDropdown";
+import { useDevicesStore } from "~/stores/devices";
 
 const Icons = {
   WINDOWS: windows,
@@ -12,7 +11,10 @@ const Icons = {
 };
 
 export const DataTable: React.FC = () => {
-  const { devices } = useLoaderData<typeof loader>();
+  const devices = useDevicesStore((state) => state.filteredDevices);
+  const staticDevices = useDevicesStore((state) => state.devices);
+
+  console.log(devices, staticDevices);
 
   return (
     <>

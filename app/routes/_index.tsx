@@ -16,6 +16,7 @@ import {
   getDevices,
   updateDevice,
 } from "~/services/devices";
+import { useDevicesStore } from "~/stores/devices";
 import { parseFormData, validateDeviceForm } from "~/utils/helpers";
 
 export const meta: MetaFunction = () => {
@@ -27,6 +28,8 @@ export const meta: MetaFunction = () => {
 
 export const loader = async () => {
   const devices = await getDevices();
+  const setDevices = useDevicesStore.getState().setDevices;
+  setDevices(devices);
   return json({ devices });
 };
 

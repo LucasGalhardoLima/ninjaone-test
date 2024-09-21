@@ -3,8 +3,31 @@ import { ReloadIcon } from "~/assets/icons/reload";
 import { Button } from "./Button";
 import { SearchIcon } from "~/assets/icons/search";
 import { DropdownIcon } from "~/assets/icons/dropdown";
+import { SortOption, useDevicesStore } from "~/stores/devices";
 
 export const TableFilters: React.FC = () => {
+  const setFilterType = useDevicesStore((state) => state.setFilterType);
+  const setFilterSystemName = useDevicesStore(
+    (state) => state.setFilterSystemName
+  );
+  const setSortOption = useDevicesStore((state) => state.setSortOption);
+
+  const handleFilterTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFilterType(event.target.value || null);
+  };
+
+  const handleFilterSystemNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFilterSystemName(event.target.value || null);
+  };
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value as SortOption);
+  };
+
   return (
     <div className="flex items-center justify-between w-full pt-6">
       <div className="flex gap-2">
@@ -15,6 +38,7 @@ export const TableFilters: React.FC = () => {
             type="text"
             placeholder="Search"
             className="outline-none px-2 py-1"
+            onChange={handleFilterSystemNameChange}
           />
         </div>
 
@@ -23,6 +47,7 @@ export const TableFilters: React.FC = () => {
           <select
             className="border border-gray-300 rounded-md p-3 pr-8 bg-white cursor-pointer outline-none appearance-none"
             defaultValue="all"
+            onChange={handleFilterTypeChange}
           >
             <option value="all">Device Type: All</option>
             <option value="laptop">Laptop</option>
@@ -39,6 +64,7 @@ export const TableFilters: React.FC = () => {
           <select
             className="border border-gray-300 rounded-md p-3 pr-8 bg-white cursor-pointer outline-none appearance-none"
             defaultValue="hdd-desc"
+            onChange={handleSortChange}
           >
             <option value="hdd-desc">Sort by: HDD Capacity (Descending)</option>
             <option value="hdd-asc">Sort by: HDD Capacity (Ascending)</option>
