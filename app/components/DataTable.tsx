@@ -36,7 +36,7 @@ export const DataTable: React.FC = () => {
                 <span>{device.system_name}</span>
               </td>
               <td className="px-4 py-2 relative w-5">
-                <TableItemDropdown device={device} />
+                <TableItemDropdown key={device.id} device={device} />
               </td>
             </tr>
           ))}

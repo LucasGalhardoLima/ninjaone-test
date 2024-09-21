@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { Form, useActionData } from "@remix-run/react";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { CloseIcon } from "~/assets/icons/close";
 import {
   action,
@@ -13,17 +13,18 @@ import {
   selectedDeviceAtom,
 } from "~/routes/_index";
 import { Button } from "./Button";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export const DeleteDeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
   const isOpen = useAtomValue(isDeleteModalOpenAtom);
   const openModal = useSetAtom(isDeleteModalOpenAtom);
-  const device = useAtomValue(selectedDeviceAtom);
+  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     openModal(false);
-  };
+    setSelectedDevice(undefined);
+  }, [openModal, setSelectedDevice]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -32,9 +33,9 @@ export const DeleteDeviceModal: React.FC = () => {
 
   useEffect(() => {
     if (actionData && "status" in actionData && actionData.status === 200) {
-      openModal(false);
+      onClose();
     }
-  }, [actionData, openModal]);
+  }, [actionData, onClose]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
@@ -69,11 +70,11 @@ export const DeleteDeviceModal: React.FC = () => {
                 </DialogTitle>
                 <p>
                   You are about to delete the device{" "}
-                  <strong>{device?.system_name}</strong>. This action cannot be
-                  undone.
+                  <strong>{selectedDevice?.system_name}</strong>. This action
+                  cannot be undone.
                 </p>
                 <Form className="flex flex-col gap-3" method="delete">
-                  <input type="hidden" name="id" value={device?.id} />
+                  <input type="hidden" name="id" value={selectedDevice?.id} />
                   <div className="flex justify-end gap-2 mt-5">
                     <Button.Root variant="outline" onClick={handleClose}>
                       <Button.Label>Cancel</Button.Label>

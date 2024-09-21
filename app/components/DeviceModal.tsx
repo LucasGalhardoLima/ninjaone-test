@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -6,42 +6,38 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { CloseIcon } from "~/assets/icons/close";
-import { useAtomValue, useSetAtom } from "jotai";
-import { action, isModalOpenAtom } from "~/routes/_index";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { action, isModalOpenAtom, selectedDeviceAtom } from "~/routes/_index";
 import { DropdownIcon } from "~/assets/icons/dropdown";
-import { useActionData, Form, useFetchers } from "@remix-run/react";
+import { useActionData, Form } from "@remix-run/react";
 import { Button } from "./Button";
 
 export const DeviceModal: React.FC = () => {
-  const fetchers = useFetchers();
   const actionData = useActionData<typeof action>();
-  const errors =
-    actionData && "errors" in actionData ? actionData.errors : undefined;
   const isOpen = useAtomValue(isModalOpenAtom);
   const openModal = useSetAtom(isModalOpenAtom);
+  const [selectedDevice, setSelectedDevice] = useAtom(selectedDeviceAtom);
 
-  let device;
+  const errors =
+    actionData && "errors" in actionData ? actionData.errors : undefined;
 
-  if (fetchers.length > 0) {
-    device = fetchers[0].data.device;
-  }
-
-  const onClose = () => {
+  const onClose = useCallback(() => {
     openModal(false);
-  };
+    setSelectedDevice(undefined);
+  }, [openModal, setSelectedDevice]);
 
   const handleClose = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     onClose();
   };
 
-  const isEdit = !!device;
+  const isEdit = !!selectedDevice;
 
   useEffect(() => {
     if (actionData && "status" in actionData && actionData.status === 200) {
-      openModal(false);
+      onClose();
     }
-  }, [actionData, openModal]);
+  }, [actionData, onClose]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
@@ -92,7 +88,7 @@ export const DeviceModal: React.FC = () => {
                         id="system_name"
                         className="block w-full outline-none"
                         placeholder="System name"
-                        defaultValue={isEdit ? device?.system_name : ""}
+                        defaultValue={isEdit ? selectedDevice?.system_name : ""}
                       />
                     </div>
                     {errors?.system_name && (
@@ -113,7 +109,7 @@ export const DeviceModal: React.FC = () => {
                         className="border border-gray-300 rounded-md p-2 pr-8 bg-white cursor-pointer outline-none appearance-none w-full"
                         name="type"
                         id="type"
-                        defaultValue={isEdit ? device?.type : ""}
+                        defaultValue={isEdit ? selectedDevice?.type : ""}
                       >
                         <option value="">Device type</option>
                         <option value="WINDOWS">Windows</option>
@@ -142,7 +138,9 @@ export const DeviceModal: React.FC = () => {
                         id="hdd_capacity"
                         className="block w-full outline-none"
                         placeholder="HDD capacity"
-                        defaultValue={isEdit ? device?.hdd_capacity : ""}
+                        defaultValue={
+                          isEdit ? selectedDevice?.hdd_capacity : ""
+                        }
                       />
                     </div>
                     {errors?.hdd_capacity && (
