@@ -32,8 +32,8 @@ export interface DevicesStore {
   modalType: ModalType;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
-  filterType: FilterOption | null;
-  setFilterType: (type: FilterOption | null) => void;
+  filterType: FilterOption[] | null;
+  setFilterType: (types: FilterOption[]) => void;
   filterSystemName: string | null;
   setFilterSystemName: (name: string | null) => void;
   sortOption: SortOption | null;
@@ -125,13 +125,13 @@ export const useDevicesStore = create<DevicesStore>()(
      * Closes the modal and clears the selected device.
      */
     closeModal: () => set({ modalType: ModalType.NONE, selectedDevice: null }),
-    filterType: null,
+    filterType: [],
     /**
      * Sets the filter type and applies filters and sorting.
      * @param {FilterOption | null} type - The filter type to set.
      */
-    setFilterType: (type: FilterOption | null) => {
-      set({ filterType: type });
+    setFilterType: (types: FilterOption[]) => {
+      set({ filterType: types });
       get().applyFiltersAndSort();
     },
     filterSystemName: null,
@@ -146,10 +146,10 @@ export const useDevicesStore = create<DevicesStore>()(
     sortOption: null,
     setSortOption: (option: SortOption | null) => {
       set({ sortOption: option });
-    /**
-     * Sets the sort option and applies filters and sorting.
-     * @param {SortOption | null} option - The sort option to set.
-     */
+      /**
+       * Sets the sort option and applies filters and sorting.
+       * @param {SortOption | null} option - The sort option to set.
+       */
       get().applyFiltersAndSort();
     },
     /**
@@ -164,11 +164,11 @@ export const useDevicesStore = create<DevicesStore>()(
 
       let filteredDevices = [...devices];
 
-      if (filterType) {
+      if (filterType?.length) {
         filteredDevices = filteredDevices.filter((device) =>
-          filterType === "all"
-            ? device.type !== "all"
-            : device.type === filterType
+          filterType.includes(FilterOption.ALL)
+            ? device.type !== FilterOption.ALL
+            : filterType.includes(device.type as FilterOption)
         );
       }
 
@@ -203,7 +203,7 @@ export const useDevicesStore = create<DevicesStore>()(
      * Clears all filters and sorting options and applies the default sorting.
      */
     clearAllFilters: () => {
-      set({ filterType: null, filterSystemName: null, sortOption: null });
+      set({ filterType: [], filterSystemName: null, sortOption: null });
       get().applyFiltersAndSort();
     },
   }))
