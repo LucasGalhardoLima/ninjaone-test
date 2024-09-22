@@ -36,6 +36,7 @@ export const SystemNameFilter: React.FC = (): JSX.Element => {
       <input
         type="text"
         placeholder="Search"
+        id="search"
         className="outline-none px-2 py-1 w-full md:w-auto"
         onChange={handleFilterSystemNameChange}
         value={filterSystemName || ""}

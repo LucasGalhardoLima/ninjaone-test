@@ -36,7 +36,7 @@ export const DeleteDeviceModalForm: React.FC = (): JSX.Element => {
         <Button.Root variant="outline" onClick={handleClose}>
           <Button.Label>Cancel</Button.Label>
         </Button.Root>
-        <Button.Root variant="danger" type="submit">
+        <Button.Root variant="danger" type="submit" id="modal-delete-button">
           <Button.Label>Delete</Button.Label>
         </Button.Root>
       </div>
