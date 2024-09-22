@@ -17,6 +17,7 @@ export enum FilterOption {
 }
 
 export enum SortOption {
+  NONE = "",
   HDD_CAPACITY_ASC = "hdd_capacity_asc",
   HDD_CAPACITY_DESC = "hdd_capacity_desc",
   SYSTEM_NAME_ASC = "system_name_asc",
@@ -143,7 +144,7 @@ export const useDevicesStore = create<DevicesStore>()(
       set({ filterSystemName: name });
       get().applyFiltersAndSort();
     },
-    sortOption: null,
+    sortOption: SortOption.NONE,
     setSortOption: (option: SortOption | null) => {
       set({ sortOption: option });
       /**

@@ -74,14 +74,16 @@ export const DeviceTypeFilter: React.FC = (): JSX.Element => {
 
   const filteredOptions = useMemo(() => {
     if (filterType?.length === deviceOptions.length - 1) {
-      return [];
+      return [
+        <ListboxOption key="no-device-option" value="no-device-option" disabled>
+          <div className="p-2 cursor-not-allowed text-gray-400">
+            No device option available
+          </div>
+        </ListboxOption>,
+      ];
     }
     return [
-      <ListboxOption
-        className="hover:bg-slate-400"
-        key={FilterOption.ALL}
-        value={FilterOption.ALL}
-      >
+      <ListboxOption key={FilterOption.ALL} value={FilterOption.ALL}>
         <div className="p-2 cursor-pointer hover:bg-[#337AB7] hover:text-white">
           All
         </div>
