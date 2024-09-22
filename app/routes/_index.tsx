@@ -21,6 +21,15 @@ import {
 import { useDevicesStore } from "~/stores/devices";
 import { parseFormData, validateDeviceForm } from "~/utils/helpers";
 
+/**
+ * Meta function for the root route.
+ *
+ * Returns an array of meta tags. The `title` tag is used to set the title of the
+ * page, and the `description` tag is used to set the description of the page in
+ * search engine results.
+ *
+ * @returns {Array} An array of meta tags.
+ */
 export const meta: MetaFunction = () => {
   return [
     { title: "NinjaOne Test" },
@@ -28,11 +37,30 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+/**
+ * Loader function for the root route.
+ *
+ * Fetches all devices from the server and returns them as a JSON response.
+ *
+ * @returns {Promise<TypedResponse<{ devices: Device[] }>>} A promise that resolves
+ * with a JSON response containing an array of Device objects.
+ */
 export const loader = async () => {
   const devices = await getDevices();
   return json({ devices });
 };
 
+/**
+ * Action function for the root route.
+ *
+ * Handles POST, PUT, and DELETE requests for device creation, editing, and deletion,
+ * respectively.
+ *
+ * @param {ActionFunctionArgs} args - The Remix action function arguments.
+ * @returns {Promise<TypedResponse>} A promise that resolves with a JSON response
+ *   containing a device object, an error message, or an error object with a 400 or
+ *   500 status code.
+ */
 export const action = async ({
   request,
 }: ActionFunctionArgs): Promise<
@@ -86,6 +114,19 @@ export const action = async ({
   }
 };
 
+  /**
+   * The root route component.
+   *
+   * Renders the devices list, table filters, and modals for adding, editing, and
+   * deleting devices.
+   *
+   * The `useLoaderData` hook is used to access the devices data fetched by the
+   * loader. The `useDevicesStore` hook is used to access the `setDevices` function,
+   * which is used to update the devices state in the store.
+   *
+   * The `useEffect` hook is used to update the devices state in the store when the
+   * component mounts.
+   */
 export default function Index() {
   const { devices } = useLoaderData<typeof loader>();
   const setDevices = useDevicesStore((state) => state.setDevices);
