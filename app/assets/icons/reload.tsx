@@ -4,6 +4,17 @@ interface ReloadIconProps {
   className?: string;
 }
 
+/**
+ * A React component that renders an SVG icon of a reload button.
+ *
+ * @param {{ className?: string }} props
+ *   The properties passed to the component.
+ * @param {string} [props.className]
+ *   Additional class names to apply to the icon.
+ *
+ * @returns {React.ReactElement}
+ *   The rendered icon element.
+ */
 export const ReloadIcon: React.FC<ReloadIconProps> = ({ className }) => {
   return (
     <svg

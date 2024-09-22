@@ -3,6 +3,18 @@ import React from "react";
 interface PlusIconProps {
   className?: string;
 }
+
+/**
+ * A React component for rendering a "plus" icon.
+ *
+ * @param {{ className?: string }} props
+ *   The properties passed to the component.
+ * @param {string} [props.className]
+ *   The CSS class name to apply to the rendered SVG element.
+ *
+ * @returns {React.ReactElement}
+ *   The rendered SVG element.
+ */
 export const PlusIcon: React.FC<PlusIconProps> = ({ className }) => (
   <svg
     className={className}

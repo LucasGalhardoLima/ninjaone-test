@@ -4,6 +4,20 @@ interface CloseIconProps {
   className?: string;
 }
 
+/**
+ * CloseIcon component renders an SVG icon for closing something.
+ * It uses the `className` property to apply any additional CSS styles.
+ *
+ * @param {CloseIconProps} props
+ * @param {string} [props.className]
+ * @returns {JSX.Element} The rendered CloseIcon component.
+ *
+ * @example
+ * <CloseIcon />
+ * 
+ * @remarks
+ * The icon is a white `X` symbol.
+ */
 export const CloseIcon: React.FC<CloseIconProps> = ({ className }) => {
   return (
     <svg

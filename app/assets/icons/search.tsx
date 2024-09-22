@@ -4,6 +4,17 @@ interface SearchIconProps {
   className?: string;
 }
 
+/**
+ * Renders an SVG icon for a search/magnifying glass.
+ *
+ * @param {SearchIconProps} props
+ *   The properties passed to the component.
+ * @param {string} [props.className]
+ *   The class name to apply to the outer `svg` element.
+ *
+ * @returns {React.ReactElement}
+ *   The rendered icon element.
+ */
 export const SearchIcon: React.FC<SearchIconProps> = ({ className }) => {
   return (
     <svg

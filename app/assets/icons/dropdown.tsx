@@ -4,6 +4,14 @@ interface DropdownIconProps {
   className?: string;
 }
 
+/**
+ * A dropdown icon, used to indicate that a button is a dropdown button.
+ *
+ * @param {{ className?: string }} props
+ * @prop {string} [className] - The CSS class name to be applied to the icon.
+ *
+ * @returns {JSX.Element} The rendered icon element.
+ */
 export const DropdownIcon: React.FC<DropdownIconProps> = ({ className }) => {
   return (
     <svg

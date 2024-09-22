@@ -4,6 +4,17 @@ interface ActionIconProps {
   className?: string;
 }
 
+/**
+ * An icon component for rendering a three horizontal dots icon.
+ *
+ * @param {{ className?: string }} props
+ *   The properties passed to the component.
+ * @param {string} [props.className]
+ *   The class name to be applied to the outermost element of the component.
+ *
+ * @returns {React.ReactElement}
+ *   The rendered icon element.
+ */
 export const ActionIcon: React.FC<ActionIconProps> = ({ className }) => (
   <svg
     className={className}
