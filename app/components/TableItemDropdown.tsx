@@ -11,6 +11,7 @@ interface TableItemDropdownProps {
 
 interface MenuButtonComponentProps {
   onClick: (() => void) | ((event: { preventDefault: () => void }) => void);
+  id?: string;
 }
 
 /**
@@ -26,8 +27,8 @@ interface MenuButtonComponentProps {
 const MenuButtonComponent = forwardRef<
   HTMLButtonElement,
   MenuButtonComponentProps
->(({ onClick }, ref) => (
-  <Button.Root variant="ghost" onClick={onClick} ref={ref}>
+>(({ onClick, id }, ref) => (
+  <Button.Root id={id} variant="ghost" onClick={onClick} ref={ref}>
     <Button.Icon icon={<ActionIcon />} variant="ghost" />
   </Button.Root>
 ));
@@ -46,7 +47,9 @@ MenuButtonComponent.displayName = "MenuButton";
  */
 export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
   device,
-}: { device: Device; }): JSX.Element => {
+}: {
+  device: Device;
+}): JSX.Element => {
   const openEditModal = useDevicesStore((state) => state.openModal);
   const openDeleteModal = useDevicesStore((state) => state.openModal);
   const selectDevice = useDevicesStore((state) => state.setSelectedDevice);
@@ -82,6 +85,7 @@ export const TableItemDropdown: React.FC<TableItemDropdownProps> = ({
       <div>
         <MenuButton
           as={MenuButtonComponent}
+          id="dropdownMenuButton"
           onClick={toggleDropdown}
         ></MenuButton>
       </div>

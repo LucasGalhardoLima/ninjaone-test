@@ -8,6 +8,7 @@ interface ButtonRootProps {
   className?: string;
   ref?: React.Ref<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
+  id?: string;
 }
 
 /**
@@ -26,9 +27,10 @@ interface ButtonRootProps {
  */
 const ButtonRoot = forwardRef<HTMLButtonElement, ButtonRootProps>(
   (
-    { children, variant = "primary", onClick, className, type },
+    { children, variant = "primary", onClick, className, ...props },
     ref
   ): JSX.Element => {
+    const { type = "button", id } = props;
     const buttonClass = cx(
       "p-3 rounded-[4px] flex gap-2 items-center",
       className,
@@ -40,7 +42,7 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonRootProps>(
     );
 
     return (
-      <button className={buttonClass} onClick={onClick} ref={ref} type={type}>
+      <button className={buttonClass} id={id} onClick={onClick} ref={ref} type={type}>
         {children}
       </button>
     );
