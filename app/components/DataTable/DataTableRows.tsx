@@ -28,7 +28,7 @@ const TableRow: React.FC<{ device: Device }> = ({
   return (
     <>
       <tr className="border-b border-gray-300">
-        <td className="px-4 py-2">
+        <td className="px-4 py-2 flex flex-col items-start">
           <div className="flex items-center gap-2">
             <img
               src={Icons[device.type as keyof typeof Icons]}
@@ -38,6 +38,9 @@ const TableRow: React.FC<{ device: Device }> = ({
               {device.system_name}
             </p>
           </div>
+          <span className="text-xs text-[#6E6D7A] capitalize">{`${device.type.toLowerCase()} workstation - ${
+            device.hdd_capacity
+          } GB`}</span>
         </td>
         <td className="px-4 py-2 w-10">
           <TableItemDropdown device={device} />

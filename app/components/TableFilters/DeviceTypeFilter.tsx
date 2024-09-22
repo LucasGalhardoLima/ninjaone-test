@@ -37,7 +37,6 @@ export const DeviceTypeFilter: React.FC = (): JSX.Element => {
     <div className="relative w-full md:w-auto">
       <select
         className="border border-gray-300 rounded-md p-3 pr-8 bg-white cursor-pointer outline-none appearance-none w-full md:w-auto"
-        defaultValue="all"
         onChange={handleFilterTypeChange}
         value={filterType || "all"}
       >

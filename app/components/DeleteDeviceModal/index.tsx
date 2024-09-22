@@ -4,26 +4,23 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { Form, useActionData } from "@remix-run/react";
+import { useActionData } from "@remix-run/react";
 import { CloseIcon } from "~/assets/icons/close";
 import { action } from "~/routes/_index";
-import { Button } from "./Button";
 import { useEffect, useCallback } from "react";
 import { ModalType, useDevicesStore } from "~/stores/devices";
+import { DeleteDeviceModalForm } from "./DeleteDeviceModalForm";
 export const DeleteDeviceModal: React.FC = () => {
   const actionData = useActionData<typeof action>();
-  const isOpen = useDevicesStore((state) => state.modalType === ModalType.DELETE);
+  const isOpen = useDevicesStore(
+    (state) => state.modalType === ModalType.DELETE
+  );
   const closeModal = useDevicesStore((state) => state.closeModal);
   const selectedDevice = useDevicesStore((state) => state.selectedDevice);
 
   const onClose = useCallback(() => {
     closeModal();
   }, [closeModal]);
-
-  const handleClose = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    onClose();
-  };
 
   useEffect(() => {
     if (actionData && "status" in actionData && actionData.status === 200) {
@@ -67,17 +64,7 @@ export const DeleteDeviceModal: React.FC = () => {
                   <strong>{selectedDevice?.system_name}</strong>. This action
                   cannot be undone.
                 </p>
-                <Form className="flex flex-col gap-3" method="delete">
-                  <input type="hidden" name="id" value={selectedDevice?.id} />
-                  <div className="flex justify-end gap-2 mt-5">
-                    <Button.Root variant="outline" onClick={handleClose}>
-                      <Button.Label>Cancel</Button.Label>
-                    </Button.Root>
-                    <Button.Root variant="danger" type="submit">
-                      <Button.Label>Delete</Button.Label>
-                    </Button.Root>
-                  </div>
-                </Form>
+                <DeleteDeviceModalForm  />
               </div>
             </div>
           </DialogPanel>

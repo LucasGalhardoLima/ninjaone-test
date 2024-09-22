@@ -12,6 +12,11 @@ export const SortFilter: React.FC = (): JSX.Element => {
   const sortOption = useDevicesStore((state) => state.sortOption);
   const setSortOption = useDevicesStore((state) => state.setSortOption);
 
+  /**
+   * The options for the sort order dropdown.
+   *
+   *  The API doesn't provide a price key in the Device type
+   */
   const sortOptions = [
     {
       label: "Sort by: None",
@@ -33,7 +38,6 @@ export const SortFilter: React.FC = (): JSX.Element => {
       label: "Sort by: Name (descending)",
       value: SortOption.SYSTEM_NAME_DESC,
     },
-    {/* The API doesn't provide a price key in the Device type */}
   ];
 
   /**
@@ -47,7 +51,6 @@ export const SortFilter: React.FC = (): JSX.Element => {
     <div className="relative w-full md:w-auto">
       <select
         className="border border-gray-300 rounded-md p-3 pr-8 bg-white cursor-pointer outline-none appearance-none w-full md:w-auto"
-        defaultValue="hdd_capacity_desc"
         onChange={handleSortChange}
         value={sortOption || ""}
       >
